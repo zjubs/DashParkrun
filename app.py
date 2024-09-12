@@ -1,5 +1,5 @@
 # Import packages
-from dash import Dash, html, dash_table, dcc, callback, Output, Input
+from dash import Dash, html, dash_table, dcc, callback, Output, Input, State
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -61,7 +61,8 @@ app.layout = [
                        value='lifeExp',
                        inline=True,
                        id='my-radio-buttons-final'),
-        dcc.Input(id="parkrun_id", type="number", placeholder="", debounce=True)               
+        dcc.Input(id="parkrun_id", type="number", placeholder="", debounce=True),
+        html.Button(id='submit-button-parkrunid', n_clicks=0, children='Submit')               
     ]),
 
     html.Div(className='row', children=[
@@ -92,13 +93,18 @@ def update_graph(col_chosen):
 
 @callback(
     Output(component_id='park_run_result_plot', component_property='figure'),
-    Input(component_id='parkrun_id', component_property='value')
+    Input('submit-button-parkrunid', 'n_clicks'),
+    State(component_id='parkrun_id', component_property='value')
 )
 
-def update_result_graph(id):
-    results_table_df = scraper.get_results_table(id)
-    fig = graphs.plot_results(results_table_df)
-    return fig
+def update_result_graph(n_clicks,id):
+    if n_clicks != 0:
+        results_table_df = scraper.get_results_table(id)
+        fig = graphs.plot_results(results_table_df)
+        return fig
+    else:
+        return go.Figure()
+
 
 
 # Run the app
