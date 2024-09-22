@@ -20,16 +20,15 @@ app.layout = [
     html.Div(children='View Parkrun Summary Statistics',
              style={'textAlign': 'center', 'fontSize': 30}),
 
-    html.Div(children=[
-        dbc.Input(id="parkrun_id", type="number", placeholder="", debounce=True),
-        dbc.Button("Submit",id='submit-button-parkrunid',color="primary", n_clicks=0)               
+    dbc.Row(children = [
+        dbc.Col(dbc.Input(id="parkrun_id", type="number", placeholder="Enter Parkrun ID", debounce=True), width = {"size": 1, "offset": 1}),
+        dbc.Col(dbc.Button("Submit",id='submit-button-parkrunid',color="primary", n_clicks=0), width = 1),
     ]),
 
-    html.Div(children=[
-        html.Div(className='six columns', children=[
-            dcc.Graph(figure= {}, id='park_run_result_plot')
-        ])
+    dbc.Row(children=[
+        dbc.Col(dcc.Graph(figure= {}, id='park_run_result_plot'), width = {"size": 6, "offset": 1})
     ])
+    
 ]
 
 # Add controls to build the interaction
