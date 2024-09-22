@@ -9,8 +9,11 @@ from io import StringIO
 import graphs
 import scraper
 import dash_bootstrap_components as dbc
+from dash_bootstrap_templates import load_figure_template
+
 
 app = Dash(external_stylesheets=[dbc.themes.CYBORG])
+load_figure_template('CYBORG')
 
 # App layout
 app.layout = [

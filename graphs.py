@@ -10,7 +10,7 @@ def plot_results(results_table_df):
 
 
     # Step 2: Create the bar chart
-    fig = px.bar(results_table_df, x='Run Date', y='Time', title="Time Spent by Date")
+    fig = px.bar(results_table_df, x='Run Date', y='Time', color = 'Event', title="Time Spent by Date")
 
     # Step 3: Manually format y-axis ticks to mm:ss
 
@@ -31,6 +31,8 @@ def plot_results(results_table_df):
     fig.update_traces(
         hovertemplate='%{x}<br>Time: %{customdata}<extra></extra>',
         customdata=[format_seconds_to_mmss(t) for t in results_table_df['Time']]
+        
+        
     )
 
     # Step 5: Add star markers where 'PB?' == 'PB'
