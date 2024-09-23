@@ -15,6 +15,20 @@ from dash_bootstrap_templates import load_figure_template
 app = Dash(external_stylesheets=[dbc.themes.CYBORG])
 load_figure_template('CYBORG')
 
+card_content = [
+    #dbc.CardHeader("Card header"),
+    dbc.CardBody(
+        [
+            html.H5("Card title", className="card-title"),
+            html.P(
+                "This is some card content that we'll reuse",
+                className="card-text",
+            ),
+        ]
+    ),
+]
+
+
 # App layout
 app.layout = [
     html.Div(children='View Parkrun Summary Statistics',
@@ -24,10 +38,21 @@ app.layout = [
         dbc.Col(dbc.Input(id="parkrun_id", type="number", placeholder="Enter Parkrun ID", debounce=True), width = {"size": 1, "offset": 1}),
         dbc.Col(dbc.Button("Submit",id='submit-button-parkrunid',color="primary", n_clicks=0), width = 1),
     ]),
+    html.Hr(),
 
     dbc.Row(children=[
-        dbc.Col(dcc.Graph(figure= {}, id='park_run_result_plot'), width = {"size": 6, "offset": 1})
-    ])
+        dbc.Col(dcc.Graph(figure= {}, id='park_run_result_plot'), width = {"size": 6, "offset": 1}),
+        dbc.Col([
+            dbc.Row(dbc.Card(card_content, color="primary", inverse=True)),
+            dbc.Row(dbc.Card(card_content, color="secondary", inverse=True))]
+            , width = 1
+        ),
+        dbc.Col([
+            dbc.Row(dbc.Card(card_content, color="success", inverse=True)),
+            dbc.Row(dbc.Card(card_content, color="warning", inverse=True))]
+            , width = 1
+        ),
+    ]),
     
 ]
 
