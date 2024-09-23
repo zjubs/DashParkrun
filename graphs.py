@@ -27,14 +27,19 @@ def plot_results(results_table_df):
         )
     )
 
-    # Step 4: Customize hover information
-    fig.update_traces(
-        hovertemplate='%{x}<br>Time: %{customdata}<extra></extra>',
-        customdata=[format_seconds_to_mmss(t) for t in results_table_df['Time']]
-        
-        
-    )
+    # Step 4: Update the hover information for each trace
+    for trace in fig.data:
+        # Filter the data for the specific trace
+        event_name = trace.name
+        event_data = results_table_df[results_table_df['Event'] == event_name]
 
+        # Create the customdata specific to this trace
+        customdata = [format_seconds_to_mmss(t) for t in event_data['Time']]
+
+        # Update trace with correct customdata and hovertemplate
+        trace.customdata = customdata
+        trace.hovertemplate = '%{x}<br>Time: %{customdata}<extra></extra>'
+        
     # Step 5: Add star markers where 'PB?' == 'PB'
     pb_mask = results_table_df['PB?'] == 'PB'
 
