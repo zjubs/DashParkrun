@@ -68,6 +68,14 @@ if __name__ == "__main__":
     soup = BeautifulSoup(user_page.text, 'html.parser')
     print(soup.prettify())
 
+    # user name
+    user_string = soup.h2.get_text()
+    print(user_string)
+
+    name_string = user_string.split('\xa0')[0]
+    print(name_string)
+    
+
     # we can check the captions for the tables in the document (expect 3 tables)
     for table in soup.find_all('table'):
         print(table.caption)
