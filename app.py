@@ -8,6 +8,7 @@ import requests
 from io import StringIO
 import graphs
 import scraper
+from result import Result
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
 
@@ -30,7 +31,7 @@ card_content = [
 
 
 # App layout
-app.layout = [
+app.layout = dbc.Container([
     html.Div(children='View Parkrun Summary Statistics',
              style={'textAlign': 'center', 'fontSize': 30}),
 
@@ -42,19 +43,29 @@ app.layout = [
 
     dbc.Row(children=[
         dbc.Col(dcc.Graph(figure= {}, id='park_run_result_plot'), width = {"size": 6, "offset": 1}),
-        dbc.Col([
-            dbc.Row(dbc.Card(card_content, color="primary", inverse=True)),
-            dbc.Row(dbc.Card(card_content, color="secondary", inverse=True))]
-            , width = 1
-        ),
-        dbc.Col([
-            dbc.Row(dbc.Card(card_content, color="success", inverse=True)),
-            dbc.Row(dbc.Card(card_content, color="warning", inverse=True))]
-            , width = 1
-        ),
+        dbc.Col(
+            dbc.Row([
+                dbc.Col(dbc.Card(card_content, color="primary", inverse=True), width=6),  # Each card takes up 6 columns (half the row)
+                dbc.Col(dbc.Card(card_content, color="secondary", inverse=True), width=6),
+                dbc.Col(dbc.Card(card_content, color="success", inverse=True), width=6),
+                dbc.Col(dbc.Card(card_content, color="warning", inverse=True), width=6)
+            ])
+                , width=2)
+
+
+        # dbc.Col([
+        #     dbc.Row(dbc.Card(card_content, color="primary", inverse=True)),
+        #     dbc.Row(dbc.Card(card_content, color="secondary", inverse=True))]
+        #     , width = 1
+        # ),
+        # dbc.Col([
+        #     dbc.Row(dbc.Card(card_content, color="success", inverse=True)),
+        #     dbc.Row(dbc.Card(card_content, color="warning", inverse=True))]
+        #     , width = 1
+        # ),
     ]),
     
-]
+], fluid = True)
 
 # Add controls to build the interaction
 
@@ -66,8 +77,10 @@ app.layout = [
 
 def update_result_graph(n_clicks,id):
     if n_clicks != 0:
-        results_table_df = scraper.get_results_table(id)
-        fig = graphs.plot_results(results_table_df)
+        page = scraper.get_url(id)
+        user_results = Result(page.text)
+        #results_table_df = scraper.get_results_table(id)
+        fig = graphs.plot_results(user_results.results_table)
         return fig
     else:
         return go.Figure()
